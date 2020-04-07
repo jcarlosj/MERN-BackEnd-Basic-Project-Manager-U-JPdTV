@@ -4,12 +4,21 @@
   "description": "API by project manager (MERN)",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node .",
+    "dev": "nodemon ."
   },
   "keywords": [
     "Node",
     "API"
   ],
   "author": "Juan Carlos Jiménez Gutiérrez <jcjimenez29@misena.edu.co>",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.7"
+  }
 }
