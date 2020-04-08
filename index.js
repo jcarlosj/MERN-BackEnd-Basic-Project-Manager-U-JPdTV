@@ -6,8 +6,11 @@ const
 
 /** Define Rutas */
 app .get( '/', ( request, response ) => {
+    console .log( 'GET /' );
     response .send( "Project Manager te saluda :)" );
 });
+/** Define Rutas para API */
+app .use( '/api', require( './routes/routes' ) );
 
 /** Conexión a BD Mongo Atlas */
 ConnectDatabase();
