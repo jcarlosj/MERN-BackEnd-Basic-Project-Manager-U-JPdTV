@@ -4,13 +4,8 @@ const
     PORT = process .env .PORT || 4000,      // Define variable de entorno
     ConnectDatabase = require( './config/db' ); // Configuración Conexión Base de Datos Mongo Atlas
 
-/** Define Rutas */
-app .get( '/', ( request, response ) => {
-    console .log( 'GET /' );
-    response .send( "Project Manager te saluda :)" );
-});
 /** Define Rutas para API */
-app .use( '/api', require( './routes/routes' ) );
+app .use( '/api/users', require( './routes/users' ) );
 
 /** Conexión a BD Mongo Atlas */
 ConnectDatabase();
