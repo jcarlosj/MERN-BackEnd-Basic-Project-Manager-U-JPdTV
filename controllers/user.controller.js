@@ -1,4 +1,6 @@
-const User = require( '../models/User' );
+const 
+    User = require( '../models/User' ),     // Model
+    bcrypt = require( 'bcryptjs' );         // Dependency
 
 exports .getUsers = ( request, response ) => {
     console .log( 'GET /api/users' );
@@ -21,7 +23,10 @@ exports .createUser = async ( request, response ) => {
             });
         }
 
+        const salt = await bcrypt .genSalt( 10 );
+
         user = new User( request .body );   // Crea 'usuario' usando el Modelo e inserta los datos.
+        user .password = await bcrypt .hash( password, salt );  // Encripta la contraseña
         await user .save();                 // Registra los datos del usuario en MongoDB usando Mongoose.
 
         response .json({
