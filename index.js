@@ -7,6 +7,7 @@ const
 /** Middlewares */
 app .use( express .json({ extended: true }));           // Habilita uso de JSON (Obliga enviar 'Content-Type':'application/json' el header de la petición)
 app .use( '/api/users', require( './routes/users' ) );  // Define Rutas para API
+app .use( '/api/auth', require( './routes/auth' ) );
 
 /** Conexión a BD Mongo Atlas */
 ConnectDatabase();
