@@ -1,6 +1,8 @@
 const 
     User = require( '../models/User' ),     // Model
-    bcrypt = require( 'bcryptjs' );         // Dependency
+    /** Dependencies */ 
+    bcrypt = require( 'bcryptjs' ),
+    { validationResult } = require( 'express-validator' );
 
 exports .getUsers = ( request, response ) => {
     console .log( 'GET /api/users' );
@@ -9,7 +11,17 @@ exports .getUsers = ( request, response ) => {
 
 exports .createUser = async ( request, response ) => {
     console .log( 'POST /api/users' );
+
+    const errors = validationResult( request );     // Implementa validacion a propiedades esperadas
     
+    /** Verifica si hay Errores de Validacion */
+    if( !errors .isEmpty() ) {
+        return response .status( 400 ) .json({
+            success: false,
+            errors: errors .array()
+        })
+    }
+
     const { email, password } = request .body;      // Destructuring 
 
     try {
