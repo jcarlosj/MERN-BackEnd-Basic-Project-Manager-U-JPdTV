@@ -1,5 +1,5 @@
 const 
-    Project = require( '../models/Project' );     // Model
+    Project = require( '../models/Project' );     // Model  
 
 exports .create = async ( request, response ) => {
     console .log( 'POST /api/projects');
