@@ -6,6 +6,8 @@ exports .create = async ( request, response ) => {
 
     try {
         const project = new Project( request .body );   // Crea 'proyecto' usando el Modelo e inserta los datos.
+
+        project .createBy = request .user .id;          // Asigna el ID usuario en la petición para indicar el creador del proyecto
         project .save();    // Registra los datos el proyecto en MongoDB usando Mongoose.
 
         response .json({
