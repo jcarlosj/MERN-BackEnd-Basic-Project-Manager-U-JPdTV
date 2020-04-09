@@ -4,6 +4,6 @@ const
     projectController = require( '../controllers/project.controller' );     // Controller
 
 /** api/auth */
-router .post( '/', projectController .createProject );
+router .post( '/', projectController .create );
 
 module .exports = router;
