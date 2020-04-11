@@ -24,4 +24,14 @@ router .get(
     projectController .getAll   // Run controller functionality
 );
 
+/** Actualiza proyecto */
+router .put(
+    '/:id',     // Path: ID del Proyecto
+    [ auth ],   // Middleware de autenticación
+    [           // Validation of express-validator fields
+        check( 'name', 'Nombre del proyecto es obligatorio' ) .not() .isEmpty(),
+    ],
+    projectController .update   // Run controller functionality
+);
+
 module .exports = router;

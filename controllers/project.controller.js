@@ -13,7 +13,7 @@ exports .create = async ( request, response ) => {
         return response .status( 400 ) .json({
             success: false,
             errors: errors .array()
-        })
+        });
     }
 
     try {
@@ -33,7 +33,7 @@ exports .create = async ( request, response ) => {
         response .status( 500 ) .json({
             success: false,
             error: {
-                message: 'El projecto no ha sido registrado!'
+                message: 'El proyecto no ha sido registrado!'
             }
         });
     }
@@ -57,7 +57,74 @@ exports .getAll = async ( request, response ) => {
         response .status( 500 ) .json({
             success: false,
             error: {
-                message: 'No se han podido obtener los projectos del usuario!'
+                message: 'No se han podido obtener los proyectos del usuario!'
+            }
+        });
+    }
+}
+
+/** Actualiza datos de un proyecto del usuario actual */
+exports .update = async ( request, response ) => {
+    console .log( 'PUT /api/projects');
+
+    const errors = validationResult( request );     // Implementa validacion a propiedades esperadas
+    
+    /** Verifica si hay Errores de Validacion */
+    if( !errors .isEmpty() ) {
+        return response .status( 400 ) .json({
+            success: false,
+            errors: errors .array()
+        });
+    }
+
+    const 
+        { name } = request .body,     // Extrae propiedades usando Destructuración
+        newProject = {};
+
+    /** Valida propiedad reciba un valor */
+    if( name ) {
+        newProject .name = name;
+    }
+
+    try {
+        // Obtener ID del proyecto pasado como parámetro
+        let project = await Project .findById( request .params .id );     // Pasa como parámetro el ID proyecto al método de Mongoose.
+
+        /** Valida si NO existe el proyecto */
+        if( ! project ) {
+            return response .status( 404 ) .json({
+                success: false,
+                error: {
+                    message: 'El proyecto no ha sido encontrado!'
+                }
+            });
+        }
+        
+        /** Valida si NO coincide el usuario creador del proyecto */
+        if( project .createBy .toString() !== request .user .id ) {
+            return response .status( 404 ) .json({
+                success: false,
+                error: {
+                    message: 'Usuario no autorizado! No coincide con el creador del proyecto.'
+                }
+            });
+        }
+
+        /** Actualiza Proyecto */
+        project = await Project .findByIdAndUpdate({ _id: request .params .id }, { $set: newProject }, { new: true });
+
+        response .json({
+            success: true,
+            message: 'Proyecto actualizado correctamente!',
+            project
+        });
+
+    } catch ( error ) {
+        console .log( error );
+        response .status( 500 ) .json({
+            success: false,
+            error: {
+                message: 'El proyecto no ha sido actualizado!'
             }
         });
     }
