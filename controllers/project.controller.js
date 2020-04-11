@@ -129,3 +129,51 @@ exports .update = async ( request, response ) => {
         });
     }
 }
+
+/** Elimina un proyecto del usuario actual */
+exports .delete = async ( request, response ) => {
+    console .log( 'DELETE /api/projects');
+
+    try {
+        // Obtener ID del proyecto pasado como parámetro
+        let project = await Project .findById( request .params .id );     // Pasa como parámetro el ID proyecto al método de Mongoose.
+
+        /** Valida si NO existe el proyecto */
+        if( ! project ) {
+            return response .status( 404 ) .json({
+                success: false,
+                error: {
+                    message: 'El proyecto no ha sido encontrado!'
+                }
+            });
+        }
+        
+        /** Valida si NO coincide el usuario creador del proyecto */
+        if( project .createBy .toString() !== request .user .id ) {
+            return response .status( 404 ) .json({
+                success: false,
+                error: {
+                    message: 'Usuario no autorizado! No coincide con el creador del proyecto.'
+                }
+            });
+        }
+
+        /** Elimina Proyecto */
+        project = await Project .findOneAndRemove({ _id: request .params .id });
+
+        response .json({
+            success: true,
+            message: 'Proyecto eliminado correctamente!',
+            project
+        });
+
+    } catch ( error ) {
+        console .log( error );
+        response .status( 500 ) .json({
+            success: false,
+            error: {
+                message: 'El proyecto no ha sido eliminado!'
+            }
+        });
+    }
+}

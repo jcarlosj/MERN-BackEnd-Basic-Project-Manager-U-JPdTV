@@ -24,7 +24,7 @@ router .get(
     projectController .getAll   // Run controller functionality
 );
 
-/** Actualiza proyecto */
+/** Actualiza proyecto del usuario actual */
 router .put(
     '/:id',     // Path: ID del Proyecto
     [ auth ],   // Middleware de autenticación
@@ -32,6 +32,13 @@ router .put(
         check( 'name', 'Nombre del proyecto es obligatorio' ) .not() .isEmpty(),
     ],
     projectController .update   // Run controller functionality
+);
+
+/** Elimina proyecto del usuario actual */
+router .delete(
+    '/:id',     // Path: ID del Proyecto
+    [ auth ],   // Middleware de autenticación
+    projectController .delete   // Run controller functionality
 );
 
 module .exports = router;
