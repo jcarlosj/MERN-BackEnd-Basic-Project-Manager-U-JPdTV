@@ -1,8 +1,20 @@
 const 
-    Project = require( '../models/Project' );     // Model  
+    Project = require( '../models/Project' ),     // Model  
+    { validationResult } = require( 'express-validator' );  // Dependency
 
+/** Crea un nuevo proyecto */
 exports .create = async ( request, response ) => {
     console .log( 'POST /api/projects');
+
+    const errors = validationResult( request );     // Implementa validacion a propiedades esperadas
+    
+    /** Verifica si hay Errores de Validacion */
+    if( !errors .isEmpty() ) {
+        return response .status( 400 ) .json({
+            success: false,
+            errors: errors .array()
+        })
+    }
 
     try {
         const project = new Project( request .body );   // Crea 'proyecto' usando el Modelo e inserta los datos.
