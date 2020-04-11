@@ -38,3 +38,27 @@ exports .create = async ( request, response ) => {
         });
     }
 }
+
+/** Obtiene todos los proyectos del usuario actual */
+exports .getAll = async ( request, response ) => {
+    console .log( 'GET /api/projects');
+
+    try {
+        const projects = await Project .find({ createBy: request .user .id }) .sort({ createdDate: -1 });  // Pasa como parámetro el ID usuario al método de Mongoose.
+
+        response .json({
+            success: true,
+            message: 'Proyectos obtenidos correctamente!',
+            projects
+        });
+
+    } catch ( error ) {
+        console .log( error );
+        response .status( 500 ) .json({
+            success: false,
+            error: {
+                message: 'No se han podido obtener los projectos del usuario!'
+            }
+        });
+    }
+}

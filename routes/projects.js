@@ -5,7 +5,9 @@ const
     auth = require( '../middlewares/auth' ),      // Middleware
     { check } = require( 'express-validator' );   // Dependency
 
-/** api/auth */
+/** PATH: api/auth */
+
+/** Nuevo proyecto */
 router .post( 
     '/',        // Path
     [ auth ],   // Middleware de autenticación
@@ -13,6 +15,13 @@ router .post(
         check( 'name', 'Nombre del proyecto es obligatorio' ) .not() .isEmpty(),
     ],
     projectController .create   // Run controller functionality
+);
+
+/** Obtiene todos los proyectos */
+router .get(
+    '/',        // Path
+    [ auth ],   // Middleware de autenticación
+    projectController .getAll   // Run controller functionality
 );
 
 module .exports = router;
