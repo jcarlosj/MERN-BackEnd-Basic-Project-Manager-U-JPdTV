@@ -21,6 +21,7 @@ router .post(
 /** Obtiene todos los proyectos */
 router .get(
     '/',        // Path
+    [ auth ],   // Middleware de autenticación
     taskController .getAll   // Run controller functionality
 );
 

@@ -66,6 +66,49 @@ exports .create = async ( request, response ) => {
 }
 
 /** Obtiene todas las tareas del proyecto seleccionado */
-exports .getAll = ( request, response ) => {
+exports .getAll = async ( request, response ) => {
     console .log( 'GET /api/tasks');
+
+    try {
+        const 
+            { project } = request .body,          // Destructuring request .body
+            projectDB = await Project .findById( project );     // Busca proyecto por ID
+
+        /** Valida si NO existe el proyecto */
+        if( ! projectDB ) {
+            return response .status( 404 ) .json({
+                success: false,
+                error: {
+                    message: 'El proyecto no ha sido encontrado!'
+                }
+            });
+        }
+
+        /** Valida si NO coincide el usuario creador del proyecto */
+        if( projectDB .createBy .toString() !== request .user .id ) {
+            return response .status( 404 ) .json({
+                success: false,
+                error: {
+                    message: 'Usuario no autorizado! No coincide con el creador del proyecto.'
+                }
+            });
+        }
+
+        const tasks = await Task .find({ project });  // Pasa como parámetro el ID del Proyecto al método de Mongoose.
+
+        response .json({
+            success: true,
+            message: 'Tareas del proyecto obtenidas correctamente!',
+            tasks
+        });
+
+    } catch ( error ) {
+        console .log( error );
+        response .status( 500 ) .json({
+            success: false,
+            error: {
+                message: 'No se han podido obtener las tareas del proyecto!'
+            }
+        });
+    }
 }
