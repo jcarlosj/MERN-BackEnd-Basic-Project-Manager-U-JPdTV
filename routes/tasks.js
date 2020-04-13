@@ -25,4 +25,11 @@ router .get(
     taskController .getAll   // Run controller functionality
 );
 
+/** Actualiza proyecto del usuario actual */
+router .put(
+    '/:id',     // Path: ID del Proyecto
+    [ auth ],   // Middleware de autenticación
+    taskController .update   // Run controller functionality
+);
+
 module .exports = router;

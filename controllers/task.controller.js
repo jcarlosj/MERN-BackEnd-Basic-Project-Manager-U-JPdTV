@@ -112,3 +112,65 @@ exports .getAll = async ( request, response ) => {
         });
     }
 }
+
+/** Actualiza tareas de un proyecto de un usuario autenticado */
+exports .update = async ( request, response ) => {
+    console .log( 'PUT /api/tasks');
+
+    try {
+
+        const 
+            { project, name, state } = request .body,          // Destructuring request .body
+            taskDB = await Task .findById( request .params .id );     // Busca proyecto por ID
+
+        /** Valida si NO existe la tarea */
+        if( ! taskDB ) {
+            return response .status( 404 ) .json({
+                success: false,
+                error: {
+                    message: 'La tarea no ha sido encontrada!'
+                }
+            });
+        }
+
+        const projectDB = await Project .findById( project );     // Pasa como parámetro el ID proyecto al método de Mongoose.
+        
+        /** Valida si NO coincide el usuario creador del proyecto */
+        if( projectDB .createBy .toString() !== request .user .id ) {
+            return response .status( 404 ) .json({
+                success: false,
+                error: {
+                    message: 'Usuario no autorizado! No coincide con el creador del proyecto.'
+                }
+            });
+        }
+
+        const newTask = {};
+
+        /** Valida propiedad reciba un valor */
+        if( name ) {
+            newTask .name = name;
+        }
+        if( state ) {
+            newTask .state = state;
+        }
+
+        /** Actualiza Tarea */
+        const task = await Task .findOneAndUpdate({ _id: request .params .id }, newTask, { new: true });      // Pasa como parámetro el ID de la Tarea al método de Mongoose.
+
+        response .json({
+            success: true,
+            message: 'Tarea de proyecto actualizada correctamente!',
+            task
+        });
+
+    } catch ( error ) {
+        console .log( error );
+        response .status( 500 ) .json({
+            success: false,
+            error: {
+                message: 'No se ha podido actualizar la tareas del proyecto!'
+            }
+        });
+    }
+}
