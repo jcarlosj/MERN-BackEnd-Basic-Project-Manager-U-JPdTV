@@ -169,8 +169,61 @@ exports .update = async ( request, response ) => {
         response .status( 500 ) .json({
             success: false,
             error: {
-                message: 'No se ha podido actualizar la tareas del proyecto!'
+                message: 'No se ha podido actualizar la tarea del proyecto!'
             }
         });
     }
+}
+
+/** Elimina un proyecto del usuario actual */
+exports .delete = async ( request, response ) => {
+    console .log( 'DELETE /api/tasks');
+
+    try {
+
+        const 
+            { project } = request .body,          // Destructuring request .body
+            taskDB = await Task .findById( request .params .id );     // Busca proyecto por ID
+
+        /** Valida si NO existe la tarea */
+        if( ! taskDB ) {
+            return response .status( 404 ) .json({
+                success: false,
+                error: {
+                    message: 'La tarea no ha sido encontrada!'
+                }
+            });
+        }
+
+        const projectDB = await Project .findById( project );     // Pasa como parámetro el ID proyecto al método de Mongoose.
+        
+        /** Valida si NO coincide el usuario creador del proyecto */
+        if( projectDB .createBy .toString() !== request .user .id ) {
+            return response .status( 404 ) .json({
+                success: false,
+                error: {
+                    message: 'Usuario no autorizado! No coincide con el creador del proyecto.'
+                }
+            });
+        }
+
+        /** Elimina Tarea */
+        const task = await Task .findOneAndRemove({ _id: request .params .id });      // Pasa como parámetro el ID de la Tarea al método de Mongoose.
+
+        response .json({
+            success: true,
+            message: 'Tarea de proyecto eliminada correctamente!',
+            task
+        });
+
+    } catch ( error ) {
+        console .log( error );
+        response .status( 500 ) .json({
+            success: false,
+            error: {
+                message: 'No se ha podido eliminar la tarea del proyecto!'
+            }
+        });
+    }
+    
 }

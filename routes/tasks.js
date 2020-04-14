@@ -32,4 +32,11 @@ router .put(
     taskController .update   // Run controller functionality
 );
 
+/** Elimina proyecto del usuario actual */
+router .delete(
+    '/:id',     // Path: ID del Proyecto
+    [ auth ],   // Middleware de autenticación
+    taskController .delete   // Run controller functionality
+);
+
 module .exports = router;
