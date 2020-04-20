@@ -5,6 +5,33 @@ const
     { validationResult } = require( 'express-validator' ),
     jwt = require( 'jsonwebtoken' );
 
+/** Authenticated User */
+exports .authenticatedUser = async ( request, response ) => {
+    console .log( 'GET /api/auth' );
+
+    try {
+        const user = await User 
+                            .findById( request .user .id )      // Pasa como parámetro el ID proyecto al método de Mongoose.
+                            .select( '-password' );             // Indicamos que excluya la propiedad 'password'
+
+        response .json({
+            success: true,
+            message: 'Usuario registrado y autenticado!',
+            user
+        });
+
+    } catch ( error ) {
+        console .log( error );
+        response .status( 500 ) .json({
+            success: false,
+            error: {
+                message: 'Error en el servidor'
+            }
+        });
+    }
+}
+
+/** LogIn User */
 exports .authenticateUser = async ( request, response ) => {
     console .log( 'POST /api/auth' );
 
@@ -66,6 +93,12 @@ exports .authenticateUser = async ( request, response ) => {
         );
 
     } catch ( error ) {
-        
+        console .log( error );
+        response .status( 500 ) .json({
+            success: false,
+            error: {
+                message: 'Error en el servidor'
+            }
+        });
     }
 }

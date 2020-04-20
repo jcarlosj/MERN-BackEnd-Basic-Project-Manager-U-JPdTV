@@ -2,9 +2,19 @@ const
     express = require( 'express' ),
     router = express .Router(),
     { check } = require( 'express-validator' ),                     // Dependency
-    authController = require( '../controllers/auth.controller' );   // Controller
+    authController = require( '../controllers/auth.controller' ),   // Controller
+    auth = require( '../middlewares/auth' );                        // Middleware
 
 /** api/auth */
+
+/** Get Authenticated User */
+router .get(
+    '/',                                // Path
+    [ auth ],                           // Middleware de autenticación
+    authController .authenticatedUser   // Run controller functionality
+);
+
+/** LogIn */
 router .post( 
     '/',        // Path
     [           // Validation of express-validator fields
