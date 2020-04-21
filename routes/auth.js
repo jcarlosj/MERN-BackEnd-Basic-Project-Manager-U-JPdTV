@@ -18,8 +18,8 @@ router .get(
 router .post( 
     '/',        // Path
     [           // Validation of express-validator fields
-        check( 'email', 'Debe ser valido' ) .isEmail(),
-        check( 'password', 'Longitud mínima 6 caracteres' ) .isLength({ min: 6 })
+        check( 'email', 'Debe ser un correo valido' ) .isEmail(),
+        // check( 'password', 'Longitud mínima 6 caracteres' ) .isLength({ min: 6 })    // Solo activo para pruebas en el BackEnd
     ], 
     authController .authenticateUser // Run controller functionality
 );

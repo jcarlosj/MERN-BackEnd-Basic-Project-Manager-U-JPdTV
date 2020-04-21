@@ -54,7 +54,9 @@ exports .authenticateUser = async ( request, response ) => {
         if( ! user ) {
             return response .status( 400 ) .json({
                 success: false,
-                message: 'El usuario NO existe!'
+                error: {
+                    message: 'El usuario NO existe!'
+                }
             });
         }
 
@@ -64,7 +66,9 @@ exports .authenticateUser = async ( request, response ) => {
         if( ! passwordMatch ) {
             return response .status( 400 ) .json({
                 success: false,
-                message: 'La contraseña es incorrecta.'
+                error: {
+                    message: 'La contraseña es incorrecta.'
+                }
             });
         }
 
