@@ -71,7 +71,7 @@ exports .getAll = async ( request, response ) => {
 
     try {
         const 
-            { project } = request .body,          // Destructuring request .body
+            { project } = request .query,                       // Destructuring request .query cuando se ha pasado valores GET usando la propiedad params
             projectDB = await Project .findById( project );     // Busca proyecto por ID
 
         /** Valida si NO existe el proyecto */
@@ -94,7 +94,9 @@ exports .getAll = async ( request, response ) => {
             });
         }
 
-        const tasks = await Task .find({ project });  // Pasa como parámetro el ID del Proyecto al método de Mongoose.
+        const tasks = await Task 
+                                .find({ project })            // Pasa como parámetro el ID del Proyecto al método de Mongoose.
+                                .sort({ createdDate: -1 });   // asc o 1, desc o -1
 
         response .json({
             success: true,
@@ -182,7 +184,7 @@ exports .delete = async ( request, response ) => {
     try {
 
         const 
-            { project } = request .body,          // Destructuring request .body
+            { project } = request .query,          // Destructuring request .query cuando se ha pasado valores GET usando la propiedad params
             taskDB = await Task .findById( request .params .id );     // Busca proyecto por ID
 
         /** Valida si NO existe la tarea */
