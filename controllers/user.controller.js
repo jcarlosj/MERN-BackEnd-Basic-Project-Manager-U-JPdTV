@@ -32,7 +32,9 @@ exports .createUser = async ( request, response ) => {
         if( user ) {
             return response .status( 400 ) .json({
                 success: false,
-                message: 'El usuario ya existe!'
+                error: {
+                    message: 'El usuario ya existe!'
+                }
             });
         }
 
