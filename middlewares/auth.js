@@ -7,7 +7,9 @@ module .exports = ( request, response, next ) => {
         console .log( 'Ops! No hay Token. Permiso no válido!' );
         return response .status( 401 ) .json({
             sucess: false, 
-            message: 'Ops! No hay Token. Permiso no válido!'
+            error: {
+                message: 'Ops! No hay Token. Permiso no válido!'
+            }
         });
     }
     
@@ -22,7 +24,9 @@ module .exports = ( request, response, next ) => {
         console .log( error );
         response .status( 401 ) .json({
             sucess: false, 
-            message: 'Ops! Token no válido. Permiso denegado!'
+            error: {
+                message: 'Ops! Token no válido. Permiso denegado!'
+            }
         });
     }
 
